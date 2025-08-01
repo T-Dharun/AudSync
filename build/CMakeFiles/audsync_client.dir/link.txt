@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/audsync_client.dir/src/AudioClient.cpp.o CMakeFiles/audsync_client.dir/src/AudioProcessor.cpp.o CMakeFiles/audsync_client.dir/src/main_client.cpp.o CMakeFiles/audsync_client.dir/src/AudioBuffer.cpp.o CMakeFiles/audsync_client.dir/src/NetworkManager.cpp.o -o audsync_client  /usr/lib/x86_64-linux-gnu/libportaudio.so 

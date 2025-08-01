@@ -1,4 +1,0 @@
-/home/harizibam/cmpy/AudSync/build/CMakeFiles/audsync_client.dir
-/home/harizibam/cmpy/AudSync/build/CMakeFiles/audsync_server.dir
-/home/harizibam/cmpy/AudSync/build/CMakeFiles/edit_cache.dir
-/home/harizibam/cmpy/AudSync/build/CMakeFiles/rebuild_cache.dir

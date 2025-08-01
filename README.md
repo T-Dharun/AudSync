@@ -234,3 +234,6 @@ The project consists of:
 - Buffer sizes can be adjusted for different latency requirements
 - Network performance depends on your local network infrastructure
 - Audio quality settings can be modified in the source code
+- 
+##Functionalities
+<img width="1773" height="661" alt="image" src="https://github.com/user-attachments/assets/55a58816-bb71-4e7c-9976-29285470eafb" />
