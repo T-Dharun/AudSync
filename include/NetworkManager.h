@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <string>
@@ -5,6 +6,7 @@
 #include <functional>
 #include <thread>
 #include <atomic>
+#include <cstdint>
 
 // Cross-platform socket includes
 #ifdef _WIN32
@@ -29,23 +31,21 @@
     #define close_socket close
 #endif
 
-
 enum class MessageType : uint8_t {
-  CONNECT = 1,
-  DISCONNECT = 2, 
-  AUDIO_DATA = 3,
-  HEARTBEAT = 4, 
-  CLIENT_READY = 5
+    CONNECT = 1,
+    DISCONNECT = 2, 
+    AUDIO_DATA = 3,
+    HEARTBEAT = 4, 
+    CLIENT_READY = 5
 };
 
-
-
+// Message struct now includes a timestamp for jitter/logging
 struct Message {
-  MessageType type;
-  uint32_t size;
-  std::vector<uint8_t> data;
+    MessageType type;
+    uint32_t size;
+    std::vector<uint8_t> data;
+    uint64_t timestamp; // Added for jitter/logging/recording
 };
-
 
 class NetworkManager {
   public: 
@@ -87,7 +87,3 @@ class NetworkManager {
     bool initializeNetworking();
     void cleanupNetworking();
 };
-
-
-
-

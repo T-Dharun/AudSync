@@ -1,6 +1,8 @@
+
 #include "NetworkManager.h"
 #include <iostream>
 #include <cstring>
+#include <chrono>
 
 NetworkManager::NetworkManager() 
     : server_socket_(INVALID_SOCKET_VAL), client_socket_(INVALID_SOCKET_VAL), is_server_(false), running_(false) {
@@ -64,6 +66,8 @@ bool NetworkManager::connectToServer(const std::string& host, int port) {
     Message connect_msg;
     connect_msg.type = MessageType::CONNECT;
     connect_msg.size = 0;
+    connect_msg.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count();
     
     return sendMessage(connect_msg, client_socket_);
 }
@@ -74,6 +78,8 @@ void NetworkManager::disconnect() {
         Message disconnect_msg;
         disconnect_msg.type = MessageType::DISCONNECT;
         disconnect_msg.size = 0;
+        disconnect_msg.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::steady_clock::now().time_since_epoch()).count();
         sendMessage(disconnect_msg, client_socket_);
         
         close_socket(client_socket_);
@@ -138,6 +144,7 @@ void NetworkManager::stopServer() {
     is_server_ = false;
 }
 
+// Updated to send timestamp
 bool NetworkManager::sendMessage(const Message& message, SOCKET socket_fd) {
     SOCKET target_socket = (socket_fd != INVALID_SOCKET_VAL) ? socket_fd : client_socket_;
     if (target_socket == INVALID_SOCKET_VAL) return false;
@@ -146,6 +153,7 @@ bool NetworkManager::sendMessage(const Message& message, SOCKET socket_fd) {
     uint8_t type = static_cast<uint8_t>(message.type);
     if (!sendRaw(&type, sizeof(type), target_socket)) return false;
     if (!sendRaw(&message.size, sizeof(message.size), target_socket)) return false;
+    if (!sendRaw(&message.timestamp, sizeof(message.timestamp), target_socket)) return false;
 
     // Send data if any
     if (message.size > 0) {
@@ -155,6 +163,7 @@ bool NetworkManager::sendMessage(const Message& message, SOCKET socket_fd) {
     return true;
 }
 
+// Updated to receive timestamp
 bool NetworkManager::receiveMessage(Message& message, SOCKET socket_fd) {
     SOCKET target_socket = (socket_fd != INVALID_SOCKET_VAL) ? socket_fd : client_socket_;
     if (target_socket == INVALID_SOCKET_VAL) return false;
@@ -163,6 +172,7 @@ bool NetworkManager::receiveMessage(Message& message, SOCKET socket_fd) {
     uint8_t type;
     if (!receiveRaw(&type, sizeof(type), target_socket)) return false;
     if (!receiveRaw(&message.size, sizeof(message.size), target_socket)) return false;
+    if (!receiveRaw(&message.timestamp, sizeof(message.timestamp), target_socket)) return false;
 
     message.type = static_cast<MessageType>(type);
     message.data.clear();
@@ -255,3 +265,4 @@ bool NetworkManager::receiveRaw(void* data, size_t size, SOCKET socket_fd) {
     
     return true;
 }
+

@@ -1,3 +1,6 @@
+
+AudioBuffer.cpp
+
 #include "AudioBuffer.h"
 #include <algorithm>
 
@@ -63,6 +66,7 @@ bool AudioBuffer::isFull() const {
   std::lock_guard<std::mutex> lock(mutex_);
   return size_ == capacity_;
 }
+
 
 
 
